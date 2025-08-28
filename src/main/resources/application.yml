@@ -1,0 +1,29 @@
+server:
+  port: ${PORT:8080}   # Render gibi ortamlarda PORT env var'ı otomatik okunur
+
+spring:
+  config:
+    import: optional:file:.env[.properties]  # .env dosyasını otomatik yükle
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      maximum-pool-size: 5       # Render free tier için güvenli
+      minimum-idle: 1
+      idle-timeout: 600000       # 10 dk
+      connection-timeout: 30000
+  jpa:
+    hibernate:
+      ddl-auto: validate         # Şema zaten Supabase’te oluşturulmuş olacak
+    properties:
+      hibernate:
+        jdbc.time_zone: UTC
+        format_sql: true
+    show-sql: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
