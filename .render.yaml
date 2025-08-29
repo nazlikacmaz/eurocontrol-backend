@@ -5,14 +5,3 @@ services:
     repo: https://github.com/nazlikacmaz/eurocontrol_backend
     dockerfilePath: Dockerfile
     plan: free
-envVars:
-      - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://db.ycgpfdyrucvwsbqdysgg.supabase.co:5432/postgres?sslmode=require
-      - key: SPRING_DATASOURCE_USERNAME
-        value: postgres
-      - key: SPRING_DATASOURCE_PASSWORD
-        value: Eurocontrol123!
-      - key: SPRING_JPA_DATABASE_PLATFORM
-        value: org.hibernate.dialect.PostgreSQLDialect
-      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
-        value: none
