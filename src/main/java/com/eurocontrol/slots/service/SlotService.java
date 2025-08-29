@@ -51,18 +51,14 @@ public class SlotService {
 		return allocateInternal(originIcao);
 	}
 
-	/** Özet (tahsis yapmadan), opsiyonel ICAO filtresi */
 	@Transactional(readOnly = true)
 	public AllocationSummary currentSummary(String originIcao) {
-		// kapasite haritası
 		Map<String, Integer> capByIcao = loadCapacities(originIcao);
 
-		// mevcut ALLOCATED uçuşlardan band sayaçlarını topla
 		Map<String, Integer> counter = new HashMap<>();
 		flightsFiltered(originIcao).stream().filter(f -> isAllocated().test(f) && f.getCtot() != null).forEach(
 				f -> counter.merge(key(f.getOrigin().getIcao(), truncateToBand(f.getCtot())), 1, Integer::sum));
 
-		// KPI’lar
 		List<Flight> all = flightsFiltered(originIcao);
 		long allocatedCount = all.stream().filter(isAllocated()).count();
 		double avgDelay = all.stream().filter(isAllocated())
@@ -76,10 +72,8 @@ public class SlotService {
 	protected AllocationSummary allocateInternal(String originIcao) {
 		Map<String, Integer> capByIcao = loadCapacities(originIcao);
 
-		// halihazırda allocated band sayaçları
 		Map<String, Integer> counter = loadAllocatedCounter(originIcao);
 
-		// allocate edilecek adaylar: PLANNED + sıralı
 		List<Flight> planned = plannedFlightsOrdered(originIcao);
 
 		int processed = 0, newlyAllocated = 0;
@@ -89,7 +83,6 @@ public class SlotService {
 		for (Flight f : planned) {
 			processed++;
 
-			// meydan kapasitesi
 			int cap = Optional.ofNullable(f.getOrigin().getCapacityPer15()).orElse(0);
 			if (cap <= 0)
 				continue;

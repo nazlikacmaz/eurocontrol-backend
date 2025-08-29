@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: codeexplainer-backend
+    runtime: docker
+    repo: https://github.com/nazlikacmaz/eurocontrol_backend
+    dockerfilePath: Dockerfile
+    plan: free
